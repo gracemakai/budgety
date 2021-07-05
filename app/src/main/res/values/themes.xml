@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Budgtey" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/middle_purple_blue</item>
+        <item name="colorPrimaryVariant">@color/turquoise</item>
+        <item name="colorOnPrimary">@color/space_cadet</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/turquoise</item>
+        <item name="colorSecondaryVariant">@color/turquoise</item>
+        <item name="colorOnSecondary">@color/space_cadet</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+</resources>
