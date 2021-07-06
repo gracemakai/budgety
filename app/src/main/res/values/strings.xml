@@ -31,4 +31,14 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="about">About</string>
+
+    <string-array name="category_entries">
+        <item>Food</item>
+        <item>Transport</item>
+        <item>MakeUp</item>
+        <item>Debt</item>
+        <item>Books</item>
+        <item>Data</item>
+
+    </string-array>
 </resources>

@@ -25,12 +25,12 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     private void addItems() {
-        transactionRepo.addTransaction(new TransactionEntity("Food", "05-07-2021 Mon", "Fries", (float) 100));
-        transactionRepo.addTransaction(new TransactionEntity("MakeUp", "13-06-2021 Wed", "Lipstick", (float) 1000));
-        transactionRepo.addTransaction(new TransactionEntity("Books", "05-07-2021 Mon", "Chemistry", (float) 1200));
-        transactionRepo.addTransaction(new TransactionEntity("Food", "05-07-2021 Mon", "Burger", (float) 500));
-        transactionRepo.addTransaction(new TransactionEntity("Transport", "05-07-2021 Mon", "Matatu", (float) 120));
-        transactionRepo.addTransaction(new TransactionEntity("Debt", "11-07-2021 Mon", "Pesa", (float) 150));
+        transactionRepo.deleteTransaction(new TransactionEntity("Food", "05-07-2021 Mon", "Fries", (float) 100));
+        transactionRepo.deleteTransaction(new TransactionEntity("MakeUp", "13-06-2021 Wed", "Lipstick", (float) 1000));
+        transactionRepo.deleteTransaction(new TransactionEntity("Books", "05-07-2021 Mon", "Chemistry", (float) 1200));
+        transactionRepo.deleteTransaction(new TransactionEntity("Food", "05-07-2021 Mon", "Burger", (float) 500));
+        transactionRepo.deleteTransaction(new TransactionEntity("Transport", "05-07-2021 Mon", "Matatu", (float) 120));
+        transactionRepo.deleteTransaction(new TransactionEntity("Debt", "11-07-2021 Mon", "Pesa", (float) 150));
     }
 
     public MutableLiveData<ArrayList<TransactionEntity>> getAllTransactionsMutableLiveData() {

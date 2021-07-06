@@ -13,14 +13,13 @@ import com.grace.budgtey.R;
 import com.grace.budgtey.database.entity.TransactionEntity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TransactionRecyclerAdapter extends RecyclerView.Adapter<TransactionRecyclerAdapter.ViewHolder> {
 
     View view;
     Context context;
 
-    ArrayList<TransactionEntity> transactionEntityList;
+    ArrayList<TransactionEntity> transactionEntityList = new ArrayList<>();
 
     public TransactionRecyclerAdapter(Context context) {
         this.context = context;
