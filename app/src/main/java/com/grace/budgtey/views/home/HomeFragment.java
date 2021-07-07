@@ -1,22 +1,7 @@
 package com.grace.budgtey.views.home;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +13,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.grace.budgtey.R;
@@ -51,13 +48,11 @@ public class HomeFragment extends Fragment {
     TransactionRecyclerAdapter recyclerAdapter;
     private HomeFragmentBinding binding;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
         recyclerAdapter = new TransactionRecyclerAdapter(getContext());
 
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -87,19 +82,20 @@ public class HomeFragment extends Fragment {
 
     private void initViews() {
 
-        toolbar = view.findViewById(R.id.toolbar_home);
-        floatingActionButton = view.findViewById(R.id.new_transaction_fab);
-        budget = view.findViewById(R.id.budget_home);
-        expense = view.findViewById(R.id.expenses_home);
-        balance = view.findViewById(R.id.balance_home);
+        //set up recyclerView
         recyclerView = view.findViewById(R.id.recent_transactions_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(recyclerAdapter);
 
+        //Set up toolbar
+        toolbar = view.findViewById(R.id.toolbar_home);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        //open up new transaction
+        floatingActionButton = view.findViewById(R.id.new_transaction_fab);
         floatingActionButton.setOnClickListener(v -> newPage(new NewTransactionFragment()));
 
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        toolbar.setTitle(null);
     }
 
     Observer<ArrayList<TransactionEntity>>allTransactionsObserver =
@@ -121,23 +117,19 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.home_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()){
-            case R.id.settings_home:
-                Toast.makeText(getContext(), "yoh", Toast.LENGTH_SHORT).show();
-                newPage(new SettingsFragment());
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.settings_home) {
+            Toast.makeText(getContext(), "yoh", Toast.LENGTH_SHORT).show();
+            newPage(new SettingsFragment());
+            return true;
         }
-
+        return super.onOptionsItemSelected(item);
 
     }
 
