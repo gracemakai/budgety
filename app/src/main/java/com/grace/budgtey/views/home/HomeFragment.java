@@ -2,11 +2,13 @@ package com.grace.budgtey.views.home;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,18 +29,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.grace.budgtey.MainActivity;
 import com.grace.budgtey.R;
 import com.grace.budgtey.adapter.TransactionRecyclerAdapter;
 import com.grace.budgtey.database.entity.TransactionEntity;
+import com.grace.budgtey.databinding.HomeFragmentBinding;
 import com.grace.budgtey.views.newTransaction.NewTransactionFragment;
 import com.grace.budgtey.views.setting.SettingsFragment;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
@@ -49,6 +49,7 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel mViewModel;
     TransactionRecyclerAdapter recyclerAdapter;
+    private HomeFragmentBinding binding;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -58,16 +59,26 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         recyclerAdapter = new TransactionRecyclerAdapter(getContext());
+
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
         mViewModel.getAllTransactionsMutableLiveData()
                 .observe(this, allTransactionsObserver);
+        mViewModel.getTotalMutableLiveData()
+                .observe(this, totalAmountObserver);
+
+        mViewModel.setBudget(getBudget());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.home_fragment, container, false);
 
+        binding = DataBindingUtil
+                .inflate(inflater, R.layout.home_fragment, container, false);
+
+        binding.setViewModel(mViewModel);
+        view = binding.getRoot();
 
         initViews();
 
@@ -101,6 +112,13 @@ public class HomeFragment extends Fragment {
         }
     };
 
+    Observer<Float> totalAmountObserver = new Observer<Float>() {
+        @Override
+        public void onChanged(Float aFloat) {
+            mViewModel.setExpenses(aFloat);
+        }
+    };
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -121,6 +139,14 @@ public class HomeFragment extends Fragment {
         }
 
 
+    }
+
+    private String getBudget() {
+
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(getContext());
+
+        return preferences.getString("budget", "20000");
     }
 
     private void newPage(Fragment fragment) {
