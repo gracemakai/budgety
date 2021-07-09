@@ -31,6 +31,10 @@ public class TransactionEntity implements Serializable {
         this.amount = amount;
     }
 
+    public TransactionEntity() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -67,7 +71,19 @@ public class TransactionEntity implements Serializable {
         return amount;
     }
 
+    public String getStringAmount(){
+        return String.valueOf(amount);
+    }
+
+    public void setStringAmount(String amount){
+        if (!amount.isEmpty()) {
+            this.amount = Float.valueOf(amount);
+        }
+    }
+
     public void setAmount(Float amount) {
-        this.amount = amount;
+        if (amount != null) {
+            this.amount = amount;
+        }
     }
 }

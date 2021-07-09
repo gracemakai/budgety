@@ -1,163 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout2"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".views.newTransaction.NewTransactionFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout2"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.grace.budgtey.views.newTransaction.NewTransactionViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".views.newTransaction.NewTransactionFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/new_transaction_toolbar"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top" />
+            android:layout_height="match_parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/save_transaction_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:background="@color/turquoise"
-            android:contentDescription="@string/new_transaction"
-            android:src="@android:drawable/ic_input_add" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="80dp"
-            android:layout_gravity="top"
-            android:elevation="8dp"
-            app:contentPadding="10dp">
-
-            <LinearLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/new_transaction_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_gravity="top" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/save_transaction_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:background="@color/turquoise"
+                android:contentDescription="@string/save_transaction"
+                android:src="@drawable/save"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="80dp"
+                android:layout_gravity="top"
+                android:elevation="8dp"
+                app:contentPadding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/amount"
-                        android:gravity="center"
-                        android:textSize="16sp"/>
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/amount_spent"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/amount"
+                            android:gravity="center"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/amount_spent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:hint="@string/money_hint"
+                            android:text="@={viewModel.transactionMutableLiveData.stringAmount}"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:importantForAutofill="no"
+                            android:inputType="number" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:hint="@string/money_hint"
-                        android:gravity="center"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:importantForAutofill="no"
-                        android:inputType="number" />
+                        android:layout_marginTop="30dp"
+                        android:orientation="horizontal">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/category"
+                            android:textSize="16sp"
+                            android:textColor="@color/black" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:orientation="horizontal">
+                        <Spinner
+                            android:id="@+id/category"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:entries="@{viewModel.categoryEntries}"
+                            android:textAlignment="center"
+                            android:textSize="18sp"
+                            android:textColor="@color/black"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/category"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"/>
+                    </LinearLayout>
 
-                    <Spinner
-                        android:id="@+id/category"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:entries="@array/category_entries"
-                        android:textAlignment="center"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/when"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"/>
-
-                    <TextView
-                        android:id="@+id/date"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/when"
+                            android:textSize="16sp"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/date"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:text="@={viewModel.transactionMutableLiveData.date}"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
                         android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:text="@string/note"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"/>
+                        android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/note"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="start"
-                        android:hint="@string/note_hint"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
-                        android:importantForAutofill="no"
-                        android:inputType="textMultiLine" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:text="@string/note"
+                            android:textSize="16sp"
+                            android:textColor="@color/black" />
+
+                        <EditText
+                            android:id="@+id/note"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:hint="@string/note_hint"
+                            android:text="@={viewModel.transactionMutableLiveData.note}"
+                            android:textSize="18sp"
+                            android:textColor="@color/black"
+                            android:importantForAutofill="no"
+                            android:inputType="textMultiLine" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-        </androidx.cardview.widget.CardView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

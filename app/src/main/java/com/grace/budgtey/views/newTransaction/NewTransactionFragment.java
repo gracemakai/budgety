@@ -1,6 +1,7 @@
 package com.grace.budgtey.views.newTransaction;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
@@ -28,6 +29,9 @@ import com.grace.budgtey.MainActivity;
 import com.grace.budgtey.R;
 import com.grace.budgtey.Utils;
 import com.grace.budgtey.database.entity.TransactionEntity;
+import com.grace.budgtey.databinding.NewTransactionFragmentBinding;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 import java.util.Objects;
@@ -39,20 +43,17 @@ public class NewTransactionFragment extends Fragment {
     View view;
     MaterialToolbar toolbar;
     EditText amountSpent, note;
-    TextView date;
     Spinner category;
     FloatingActionButton saveFab;
 
     private NewTransactionViewModel mViewModel;
-    Utils utils;
-
-    public static NewTransactionFragment newInstance() {
-        return new NewTransactionFragment();
-    }
+    private NewTransactionFragmentBinding binding;
+    Utils utils = new Utils();
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         mViewModel = new ViewModelProvider(this).get(NewTransactionViewModel.class);
         // TODO: Use the ViewModel
@@ -61,9 +62,16 @@ public class NewTransactionFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.new_transaction_fragment, container, false);
 
-        utils = new Utils();
+        //Bind fragment
+        binding = DataBindingUtil
+                .inflate(inflater, R.layout.new_transaction_fragment,
+                        container, false);
+
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(mViewModel);
+
+        view = binding.getRoot();
 
         initViews();
 
@@ -71,36 +79,30 @@ public class NewTransactionFragment extends Fragment {
     }
 
     private void initViews() {
+
+        //Set up toolbar
         toolbar = view.findViewById(R.id.new_transaction_toolbar);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity())
+                .getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity())
+                .getSupportActionBar()).setTitle("New transaction");
+
         amountSpent = view.findViewById(R.id.amount_spent);
-        date = view.findViewById(R.id.date);
         note = view.findViewById(R.id.note);
         category = view.findViewById(R.id.category);
         saveFab = view.findViewById(R.id.save_transaction_fab);
-
-        date.setText(utils.getCurrentTimeOrDate());
-
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("New transaction");
-
         saveFab.setOnClickListener(v -> saveTransaction());
-        date.setOnClickListener(v -> {
-            utils.showDatePickerDialog(getContext(), (view, year, month, dayOfMonth) ->
-                    date.setText(utils
-                            .getSpecificDate("EEE, dd-MM-yy", year, month, dayOfMonth)
-                    )
-            );
-        });
+
     }
 
     private void saveTransaction() {
 
         if (utils.hasText(amountSpent) && utils.hasText(note)) {
 
-            mViewModel.addTransaction(new TransactionEntity(category.getSelectedItem().toString(),
-                    date.getText().toString().trim(), note.getText().toString().trim(),
-                    Float.parseFloat(amountSpent.getText().toString().trim())));
+            TransactionEntity transactionEntity = new TransactionEntity();
+            transactionEntity.setCategory(category.getSelectedItem().toString());
+            mViewModel.addTransaction(transactionEntity);
         }
     }
 
@@ -108,12 +110,9 @@ public class NewTransactionFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
-            Log.i(TAG, "onOptionsItemSelected: home selected");
-            getActivity().onBackPressed();
-        } else {
-            Log.i(TAG, "onOptionsItemSelected: " + item.getItemId());
-        }
 
+            requireActivity().onBackPressed();
+        }
         return super.onOptionsItemSelected(item);
     }
 

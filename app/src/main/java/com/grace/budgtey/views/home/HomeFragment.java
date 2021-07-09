@@ -35,6 +35,7 @@ import com.grace.budgtey.views.newTransaction.NewTransactionFragment;
 import com.grace.budgtey.views.setting.SettingsFragment;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
@@ -42,7 +43,6 @@ public class HomeFragment extends Fragment {
     FloatingActionButton floatingActionButton;
     Toolbar toolbar;
     RecyclerView recyclerView;
-    TextView budget, expense, balance;
 
     private HomeViewModel mViewModel;
     TransactionRecyclerAdapter recyclerAdapter;
@@ -69,6 +69,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+        //Bind fragment
         binding = DataBindingUtil
                 .inflate(inflater, R.layout.home_fragment, container, false);
 
@@ -89,8 +90,9 @@ public class HomeFragment extends Fragment {
 
         //Set up toolbar
         toolbar = view.findViewById(R.id.toolbar_home);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) requireActivity())
+                .getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //open up new transaction
         floatingActionButton = view.findViewById(R.id.new_transaction_fab);
@@ -98,16 +100,17 @@ public class HomeFragment extends Fragment {
 
     }
 
+    //Sends user transactions to recycler when they finish being read from the database
     Observer<ArrayList<TransactionEntity>>allTransactionsObserver =
             new Observer<ArrayList<TransactionEntity>>() {
         @Override
         public void onChanged(ArrayList<TransactionEntity> transactionEntities) {
             recyclerAdapter.addTransactions(transactionEntities);
             recyclerAdapter.notifyDataSetChanged();
-            Log.d(getClass().getSimpleName(), "onChanged() returned: " + transactionEntities);
         }
     };
 
+    //Updates the ui when the total expenses are read from the database
     Observer<Float> totalAmountObserver = new Observer<Float>() {
         @Override
         public void onChanged(Float aFloat) {
@@ -125,14 +128,12 @@ public class HomeFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.settings_home) {
-            Toast.makeText(getContext(), "yoh", Toast.LENGTH_SHORT).show();
             newPage(new SettingsFragment());
-            return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
 
+    //Get budget from preferences
     private String getBudget() {
 
         SharedPreferences preferences = PreferenceManager
@@ -141,6 +142,7 @@ public class HomeFragment extends Fragment {
         return preferences.getString("budget", "20000");
     }
 
+    //Opens up a new fragment
     private void newPage(Fragment fragment) {
 
         FragmentManager fragmentManager = getParentFragmentManager();

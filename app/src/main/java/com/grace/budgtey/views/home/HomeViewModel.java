@@ -1,7 +1,6 @@
 package com.grace.budgtey.views.home;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -15,14 +14,16 @@ import java.util.ArrayList;
 
 public class HomeViewModel extends AndroidViewModel {
 
-    TransactionRepo transactionRepo;
+    private TransactionRepo transactionRepo;
     private final MoneyModel moneyModel;
+
     private MutableLiveData<ArrayList<TransactionEntity>> allTransactionsMutableLiveData;
     private MutableLiveData<Float> totalMutableLiveData;
     public MutableLiveData<MoneyModel> moneyModelMutableLiveData = new MutableLiveData<>();
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
+
         transactionRepo = new TransactionRepo(application.getApplicationContext());
         moneyModel = new MoneyModel("", "", "");
         moneyModelMutableLiveData.setValue(moneyModel);
@@ -39,6 +40,7 @@ public class HomeViewModel extends AndroidViewModel {
         setBalance();
     }
 
+    //Get balance from subtracting expenses from budget
     public void setBalance() {
         if (moneyModel.getExpenses().equals("null")){
             moneyModel.setExpenses("0");
@@ -51,6 +53,7 @@ public class HomeViewModel extends AndroidViewModel {
         moneyModelMutableLiveData.setValue(moneyModel);
     }
 
+    //Get all transactions
     public MutableLiveData<ArrayList<TransactionEntity>> getAllTransactionsMutableLiveData() {
 
         if (allTransactionsMutableLiveData == null){
@@ -60,18 +63,17 @@ public class HomeViewModel extends AndroidViewModel {
         return allTransactionsMutableLiveData;
     }
 
+    //Get total expenses
     public MutableLiveData<Float> getTotalMutableLiveData() {
 
         if (totalMutableLiveData == null){
             totalMutableLiveData = transactionRepo.getTotalAmountSpent();
         }
 
-        Log.i(getClass().getSimpleName(), "getTotalMutableLiveData: "
-                + totalMutableLiveData.getValue());
-
         return totalMutableLiveData;
     }
 
+    //Delete transaction
     public void deleteTransaction(TransactionEntity transactionEntity){
         transactionRepo.deleteTransaction(transactionEntity);
     }
