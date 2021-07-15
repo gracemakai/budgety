@@ -48,6 +48,7 @@
                     android:background="@color/turquoise">
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/money_card_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

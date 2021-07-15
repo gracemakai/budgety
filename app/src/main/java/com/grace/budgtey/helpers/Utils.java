@@ -1,10 +1,13 @@
-package com.grace.budgtey;
+package com.grace.budgtey.helpers;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -144,4 +147,16 @@ public class Utils {
         return "";
     }
 
+    public void showAlertDialog(Context context, String title, String msg,
+                                DialogInterface.OnClickListener posBtnListener,
+                                DialogInterface.OnClickListener negBtnListener) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setMessage(msg);
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("Yes", posBtnListener);
+        alertDialogBuilder.setNegativeButton("No", negBtnListener);
+        alertDialogBuilder.show();
+
+    }
 }

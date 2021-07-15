@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context=".views.spendingDetails.SpendingDetailsFragment">
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/expenses_pie_chart"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/categories_total_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"/>
+
+</LinearLayout>

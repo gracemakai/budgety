@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.grace.budgtey.R;
@@ -76,6 +78,7 @@ public class TransactionRecyclerAdapter extends RecyclerView.Adapter<Transaction
             dayTotalAmount = itemView.findViewById(R.id.day_total_amount_home);
             name = itemView.findViewById(R.id.item_name_home);
             itemAmount = itemView.findViewById(R.id.item_amount_home);
+
         }
     }
 }

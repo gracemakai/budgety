@@ -4,39 +4,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.grace.budgtey.MainActivity;
 import com.grace.budgtey.R;
-import com.grace.budgtey.Utils;
+import com.grace.budgtey.helpers.Utils;
 import com.grace.budgtey.database.entity.TransactionEntity;
 import com.grace.budgtey.databinding.NewTransactionFragmentBinding;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Calendar;
 import java.util.Objects;
-
-import static android.content.ContentValues.TAG;
 
 public class NewTransactionFragment extends Fragment {
 
@@ -56,7 +44,6 @@ public class NewTransactionFragment extends Fragment {
         setHasOptionsMenu(true);
 
         mViewModel = new ViewModelProvider(this).get(NewTransactionViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     @Override

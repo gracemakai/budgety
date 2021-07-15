@@ -1,13 +1,12 @@
 package com.grace.budgtey.views.newTransaction;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.grace.budgtey.Utils;
+import com.grace.budgtey.helpers.Utils;
 import com.grace.budgtey.database.entity.TransactionEntity;
 import com.grace.budgtey.repository.TransactionRepo;
 
@@ -48,7 +47,7 @@ public class NewTransactionViewModel extends AndroidViewModel {
 
     public void addTransaction(TransactionEntity entity) {
         transactionMutableLiveData.getValue().setCategory(entity.getCategory());
-        Log.i(getClass().getSimpleName(), "addTransaction: " + transactionMutableLiveData.getValue());
-        transactionRepo.addTransaction(transactionEntity);
+
+        transactionRepo.addTransaction(transactionMutableLiveData.getValue());
     }
 }

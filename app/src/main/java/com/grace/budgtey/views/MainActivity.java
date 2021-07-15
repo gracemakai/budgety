@@ -1,4 +1,4 @@
-package com.grace.budgtey;
+package com.grace.budgtey.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.grace.budgtey.R;
 import com.grace.budgtey.views.home.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
