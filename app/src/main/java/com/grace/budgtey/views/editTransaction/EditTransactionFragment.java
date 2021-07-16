@@ -31,10 +31,6 @@ import java.util.Objects;
 public class EditTransactionFragment extends Fragment {
 
     View view;
-    MaterialToolbar toolbar;
-    EditText amountSpent, note;
-    Spinner category;
-    FloatingActionButton saveEditFab;
 
     EditTransactionViewModel mViewModel;
     TransactionEntity transactionEntity;
@@ -70,18 +66,12 @@ public class EditTransactionFragment extends Fragment {
 
     private void initViews() {
 
-        toolbar = view.findViewById(R.id.edit_transaction_toolbar);
-
         AppCompatActivity appCompatActivity = (AppCompatActivity)getActivity();
-        appCompatActivity.setSupportActionBar(toolbar);
+        appCompatActivity.setSupportActionBar(binding.editTransactionToolbar);
         appCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         appCompatActivity.getSupportActionBar().setTitle("Edit transaction");
 
-        amountSpent = view.findViewById(R.id.amount_edit);
-        note = view.findViewById(R.id.note_edit);
-        category = view.findViewById(R.id.category_edit);
-        saveEditFab = view.findViewById(R.id.save_edit_transaction_fab);
-        saveEditFab.setOnClickListener(v -> saveEditTransaction());
+        binding.saveEditTransactionFab.setOnClickListener(v -> saveEditTransaction());
     }
 
     private void saveEditTransaction(){
@@ -91,10 +81,10 @@ public class EditTransactionFragment extends Fragment {
     }
 
     private TransactionEntity getTransactionDetails() {
-        if (new Utils().hasText(amountSpent) && new Utils().hasText(note)) {
+        if (new Utils().hasText(binding.amountEdit) && new Utils().hasText(binding.noteEdit)) {
 
             TransactionEntity transactionEntity = new TransactionEntity();
-            transactionEntity.setCategory(category.getSelectedItem().toString());
+            transactionEntity.setCategory(binding.categoryEdit.getSelectedItem().toString());
             return transactionEntity;
         }
         return null;
@@ -112,6 +102,7 @@ public class EditTransactionFragment extends Fragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 requireActivity().onBackPressed();
+                break;
 
             case R.id.delete:
 
@@ -123,10 +114,11 @@ public class EditTransactionFragment extends Fragment {
                         (dialog, which) -> {
                             dialog.cancel();
                         });
+                break;
 
             default: return super.onOptionsItemSelected(item);
         }
-
+        return super.onOptionsItemSelected(item);
     }
 
     private void deleteTransaction() {

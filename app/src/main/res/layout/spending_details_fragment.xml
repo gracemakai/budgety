@@ -1,22 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
     android:orientation="vertical"
     tools:context=".views.spendingDetails.SpendingDetailsFragment">
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/expenses_pie_chart"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/spending_details_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="350dp"/>
+        android:layout_height="?actionBarSize"
+        android:layout_gravity="top" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categories_total_recyclerView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/expenses_pie_chart"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/spends_by_category"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:letterSpacing="0.1"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categories_total_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

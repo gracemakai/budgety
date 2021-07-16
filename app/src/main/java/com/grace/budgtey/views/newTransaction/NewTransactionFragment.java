@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,10 +30,6 @@ import java.util.Objects;
 public class NewTransactionFragment extends Fragment {
 
     View view;
-    MaterialToolbar toolbar;
-    EditText amountSpent, note;
-    Spinner category;
-    FloatingActionButton saveFab;
 
     private NewTransactionViewModel mViewModel;
     private NewTransactionFragmentBinding binding;
@@ -68,28 +65,34 @@ public class NewTransactionFragment extends Fragment {
     private void initViews() {
 
         //Set up toolbar
-        toolbar = view.findViewById(R.id.new_transaction_toolbar);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(binding.newTransactionToolbar);
         Objects.requireNonNull(((AppCompatActivity) requireActivity())
                 .getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(((AppCompatActivity) requireActivity())
                 .getSupportActionBar()).setTitle("New transaction");
 
-        amountSpent = view.findViewById(R.id.amount_spent);
-        note = view.findViewById(R.id.note);
-        category = view.findViewById(R.id.category);
-        saveFab = view.findViewById(R.id.save_transaction_fab);
-        saveFab.setOnClickListener(v -> saveTransaction());
+        binding.date.setOnClickListener(v -> showDateDialog());
+        binding.saveTransactionFab.setOnClickListener(v -> saveTransaction());
 
+    }
+
+
+    public void showDateDialog(){
+        new Utils().showDatePickerDialog(getContext(),
+                (view, year, month, dayOfMonth) -> {
+                    String dateString = new Utils().getSpecificDate(year, month, dayOfMonth);
+                    binding.date.setText(dateString);
+                });
     }
 
     private void saveTransaction() {
 
-        if (utils.hasText(amountSpent) && utils.hasText(note)) {
+        if (utils.hasText(binding.amountSpent) && utils.hasText(binding.note)) {
 
             TransactionEntity transactionEntity = new TransactionEntity();
-            transactionEntity.setCategory(category.getSelectedItem().toString());
+            transactionEntity.setCategory(binding.category.getSelectedItem().toString());
             mViewModel.addTransaction(transactionEntity);
+            requireActivity().onBackPressed();
         }
     }
 

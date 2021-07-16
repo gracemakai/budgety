@@ -41,10 +41,6 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
 
     View view;
-    FloatingActionButton floatingActionButton;
-    Toolbar toolbar;
-    RecyclerView recyclerView;
-    CardView moneyCardView;
 
     private HomeViewModel mViewModel;
     TransactionRecyclerAdapter recyclerAdapter;
@@ -61,12 +57,13 @@ public class HomeFragment extends Fragment {
 
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
+        mViewModel.setBudget(getBudget());
+
         mViewModel.getAllTransactionsMutableLiveData()
                 .observe(this, allTransactionsObserver);
         mViewModel.getTotalMutableLiveData()
                 .observe(this, totalAmountObserver);
 
-        mViewModel.setBudget(getBudget());
     }
 
     @Override
@@ -88,23 +85,20 @@ public class HomeFragment extends Fragment {
     private void initViews() {
 
         //set up recyclerView
-        recyclerView = view.findViewById(R.id.recent_transactions_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(recyclerAdapter);
+        binding.recentTransactionsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recentTransactionsRecycler.setAdapter(recyclerAdapter);
 
         //Set up toolbar
-        toolbar = view.findViewById(R.id.toolbar_home);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(binding.toolbarHome);
         ((AppCompatActivity) requireActivity())
                 .getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //open up new transaction
-        floatingActionButton = view.findViewById(R.id.new_transaction_fab);
-        floatingActionButton.setOnClickListener(v -> newPage(new NewTransactionFragment()));
+        binding.newTransactionFab.setOnClickListener(v -> newPage(new NewTransactionFragment()));
 
         //Card view money
-        moneyCardView = view.findViewById(R.id.money_card_view);
-        moneyCardView.setOnClickListener(v -> newPage(new SpendingDetailsFragment(transactions)));
+        binding.moneyCardView
+                .setOnClickListener(v -> newPage(new SpendingDetailsFragment(transactions)));
 
     }
 
@@ -114,18 +108,32 @@ public class HomeFragment extends Fragment {
         @Override
         public void onChanged(ArrayList<TransactionEntity> transactionEntities) {
             transactions = transactionEntities;
+
             recyclerItemClicked(transactionEntities);
             recyclerAdapter.addTransactions(transactionEntities);
             recyclerAdapter.notifyDataSetChanged();
+
+            addExpenses(transactionEntities);
         }
     };
 
+    private void addExpenses(ArrayList<TransactionEntity> transactionEntities) {
+        float totalExpenses = 0f;
+
+        for (int i = 0; i < transactionEntities.size(); i++) {
+            totalExpenses += transactionEntities.get(i).getAmount();
+        }
+
+        mViewModel.setExpenses(totalExpenses);
+    }
 
     //Recycler click listener
     private void recyclerItemClicked(ArrayList<TransactionEntity> transactionEntities) {
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(),
-                recyclerView, new RecyclerTouchListener.ClickListener() {
+        binding.recentTransactionsRecycler
+                .addOnItemTouchListener(new RecyclerTouchListener(getContext(),
+                        binding.recentTransactionsRecycler,
+                        new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 newPage(new EditTransactionFragment(transactionEntities.get(position)));
@@ -146,14 +154,13 @@ public class HomeFragment extends Fragment {
 
             }
         }));
-
     }
 
     //Updates the ui when the total expenses are read from the database
     Observer<Float> totalAmountObserver = new Observer<Float>() {
         @Override
         public void onChanged(Float aFloat) {
-            mViewModel.setExpenses(aFloat);
+
         }
     };
 
@@ -192,5 +199,6 @@ public class HomeFragment extends Fragment {
 
     private void deleteTransaction(TransactionEntity transactionEntity) {
         mViewModel.deleteTransaction(transactionEntity);
+        recyclerAdapter.notifyDataSetChanged();
     }
 }

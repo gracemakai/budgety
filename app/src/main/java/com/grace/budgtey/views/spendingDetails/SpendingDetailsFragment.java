@@ -3,11 +3,13 @@ package com.grace.budgtey.views.spendingDetails;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +24,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.grace.budgtey.R;
 import com.grace.budgtey.adapter.CategoryTotalRecyclerAdapter;
 import com.grace.budgtey.database.entity.TransactionEntity;
@@ -31,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 
 public class SpendingDetailsFragment extends Fragment {
@@ -40,6 +44,7 @@ public class SpendingDetailsFragment extends Fragment {
 
     View view;
     RecyclerView categoriesRecyclerView;
+    MaterialToolbar toolbar;
 
     public SpendingDetailsFragment(ArrayList<TransactionEntity> transactionEntityArrayList) {
         this.transactionEntityArrayList = transactionEntityArrayList;
@@ -48,6 +53,7 @@ public class SpendingDetailsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         SpendingDetailsViewModel mViewModel = new ViewModelProvider(this).get(SpendingDetailsViewModel.class);
         // TODO: Use the ViewModel
     }
@@ -59,6 +65,15 @@ public class SpendingDetailsFragment extends Fragment {
 
         initRecyclerView();
         preparePieChart();
+
+
+        //Set up toolbar
+        toolbar = view.findViewById(R.id.spending_details_toolbar);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity())
+                .getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity())
+                .getSupportActionBar()).setTitle("Expenses");
 
         return view;
     }
@@ -158,7 +173,7 @@ public class SpendingDetailsFragment extends Fragment {
         }
 
         PieDataSet dataSet = new PieDataSet(expenses, "");
-        dataSet.setColors(getColors());
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         dataSet.setDrawIcons(false);
         dataSet.setSliceSpace(3f);
         dataSet.setIconsOffset(new MPPointF(0, 40));
@@ -175,7 +190,7 @@ public class SpendingDetailsFragment extends Fragment {
         pieChart.setEntryLabelTextSize(12);
         pieChart.setDrawEntryLabels(false);
         pieChart.setEntryLabelColor(Color.WHITE);
-        pieChart.setCenterText("Spending by category");
+        pieChart.setCenterText("Total = " + getTotalExpenses().intValue());
         pieChart.setCenterTextSize(16);
         pieChart.getDescription().setEnabled(false);
         pieChart.setUsePercentValues(true);
@@ -220,4 +235,13 @@ public class SpendingDetailsFragment extends Fragment {
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+
+            requireActivity().onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

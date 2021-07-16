@@ -17,6 +17,7 @@ import java.util.Date;
 public class Utils {
 
     public String REQUIRED_MSG = "Required Field";
+    String datePattern = "EEEE, dd MMMM yyyy";
     // check the input field has any text or not
     // return true if it contains text otherwise false
     public boolean hasText(EditText editText) {
@@ -113,14 +114,13 @@ public class Utils {
     /**
      * Used to get specific time or date according to given format
      *
-     * @param format
      * @param year
      * @param month
      * @param day
      * @return
      */
-    public String getSpecificDate(String format, int year, int month, int day) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+    public String getSpecificDate(int year, int month, int day) {
+        SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
         Calendar newDate = Calendar.getInstance();
         newDate.set(year, month, day);
         return sdf.format(newDate.getTime());
@@ -132,7 +132,7 @@ public class Utils {
      * @return
      */
     public String getCurrentTimeOrDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
         return sdf.format(Calendar.getInstance().getTime());
     }
 

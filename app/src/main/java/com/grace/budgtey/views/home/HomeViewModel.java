@@ -76,5 +76,6 @@ public class HomeViewModel extends AndroidViewModel {
     //Delete transaction
     public void deleteTransaction(TransactionEntity transactionEntity){
         transactionRepo.deleteTransaction(transactionEntity);
+
     }
 }
