@@ -29,7 +29,20 @@
                 android:background="@color/turquoise"
                 app:menu="@menu/home_menu"
                 android:minHeight="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme" />
+                android:theme="?attr/actionBarTheme">
+
+                <Button
+                    android:id="@+id/month_and_year_btn"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:pointerIcon="vertical_double_arrow"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:text="@string/today"
+                    android:gravity="start"/>
+
+            </androidx.appcompat.widget.Toolbar>
 
 
             <LinearLayout

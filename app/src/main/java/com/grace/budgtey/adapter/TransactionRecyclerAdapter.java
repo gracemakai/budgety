@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.grace.budgtey.ListItemClickListener;
 import com.grace.budgtey.R;
-import com.grace.budgtey.database.entity.TransactionEntity;
+import com.grace.budgtey.models.DayTransactionsModel;
 
 import java.util.ArrayList;
 
@@ -20,46 +20,47 @@ public class TransactionRecyclerAdapter extends RecyclerView.Adapter<Transaction
 
     View view;
     Context context;
+    TransactionItemsRecyclerAdapter itemsRecyclerAdapter;
+    final private ListItemClickListener mOnClickListener;
 
-    ArrayList<TransactionEntity> transactionEntityList = new ArrayList<>();
+    ArrayList<DayTransactionsModel> transactionEntityList = new ArrayList<>();
 
-    public TransactionRecyclerAdapter(Context context) {
+    public TransactionRecyclerAdapter(Context context, ListItemClickListener mOnClickListener) {
         this.context = context;
+        this.mOnClickListener = mOnClickListener;
+        itemsRecyclerAdapter = new TransactionItemsRecyclerAdapter(context, mOnClickListener);
+
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        view = LayoutInflater.from(context).inflate(R.layout.transaction_view, parent, false);
+        view = LayoutInflater.from(context)
+                .inflate(R.layout.transaction_view, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TransactionEntity transactionEntity = transactionEntityList.get(position);
+        DayTransactionsModel transactionEntity = transactionEntityList.get(position);
 
         holder.date.setText(transactionEntity.getDate());
-        holder.dayTotalAmount.setText(String.valueOf(getDayTotalAmount()));
-        holder.name.setText(transactionEntity.getNote());
-        holder.itemAmount.setText(String.valueOf(transactionEntity.getAmount()));
+        holder.dayTotalAmount.setText(String.valueOf(transactionEntity.getDayTotal()));
+
+        holder.transactionItems.setLayoutManager(new LinearLayoutManager(context));
+        holder.transactionItems.setAdapter(itemsRecyclerAdapter);
+
+        itemsRecyclerAdapter.addTransactions(transactionEntity.getDayTransactions());
 
     }
 
-    private float getDayTotalAmount(){
-        float totalAmount = 0;
 
-        for (int i = 0; i < transactionEntityList.size(); i++){
-            totalAmount += transactionEntityList.get(i).getAmount();
-        }
-
-        return totalAmount;
-    }
-
-    public void addTransactions(ArrayList<TransactionEntity> transactionEntities){
+    public void addTransactions(ArrayList<DayTransactionsModel> transactionEntities){
         this.transactionEntityList = transactionEntities;
         notifyDataSetChanged();
+
     }
 
     @Override
@@ -67,18 +68,18 @@ public class TransactionRecyclerAdapter extends RecyclerView.Adapter<Transaction
         return transactionEntityList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView date, dayTotalAmount, name, itemAmount;
+        TextView date, dayTotalAmount;
+        RecyclerView transactionItems;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             date = itemView.findViewById(R.id.date_home);
             dayTotalAmount = itemView.findViewById(R.id.day_total_amount_home);
-            name = itemView.findViewById(R.id.item_name_home);
-            itemAmount = itemView.findViewById(R.id.item_amount_home);
-
+            transactionItems = itemView.findViewById(R.id.recycler_view_transaction_items);
         }
+
     }
 }

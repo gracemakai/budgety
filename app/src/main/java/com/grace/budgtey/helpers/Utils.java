@@ -17,7 +17,8 @@ import java.util.Date;
 public class Utils {
 
     public String REQUIRED_MSG = "Required Field";
-    String datePattern = "EEEE, dd MMMM yyyy";
+    public String yearMonthDateDayPattern = "EEEE, dd MMMM yyyy";
+    public String yearMonthPattern = "MMM YYYY";
     // check the input field has any text or not
     // return true if it contains text otherwise false
     public boolean hasText(EditText editText) {
@@ -120,10 +121,22 @@ public class Utils {
      * @return
      */
     public String getSpecificDate(int year, int month, int day) {
-        SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
+        SimpleDateFormat sdf = new SimpleDateFormat(yearMonthDateDayPattern);
         Calendar newDate = Calendar.getInstance();
         newDate.set(year, month, day);
         return sdf.format(newDate.getTime());
+    }
+
+    public String getSpecificMonthAndYear(int year, int month) {
+        SimpleDateFormat sdf = new SimpleDateFormat(yearMonthPattern);
+        Calendar newDate = Calendar.getInstance();
+        newDate.set(year, month, 1);
+        return sdf.format(newDate.getTime());
+    }
+
+    public String getMonthAndYear() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(yearMonthPattern);
+        return simpleDateFormat.format(Calendar.getInstance().getTime());
     }
 
     /**
@@ -132,7 +145,7 @@ public class Utils {
      * @return
      */
     public String getCurrentTimeOrDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
+        SimpleDateFormat sdf = new SimpleDateFormat(yearMonthDateDayPattern);
         return sdf.format(Calendar.getInstance().getTime());
     }
 
@@ -140,7 +153,8 @@ public class Utils {
         SimpleDateFormat sdfOldFormat = new SimpleDateFormat(oldFormat);
         SimpleDateFormat sdfNewFormat = new SimpleDateFormat(newFormat);
         try {
-            return sdfNewFormat.format(sdfOldFormat.parse(time));
+            Date date = sdfOldFormat.parse(time);
+            return sdfNewFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
