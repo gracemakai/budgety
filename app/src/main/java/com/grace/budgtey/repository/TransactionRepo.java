@@ -1,53 +1,50 @@
 package com.grace.budgtey.repository;
 
-import android.app.Application;
 import android.content.Context;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import com.grace.budgtey.database.DatabaseClient;
 import com.grace.budgtey.database.entity.TransactionEntity;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 
 public class TransactionRepo {
 
     Context context;
+    LiveData<List<TransactionEntity>> allTransactionsLiveData;
+    LiveData<Float> totalLiveData;
 
     public TransactionRepo(Context context) {
         this.context = context;
     }
 
-    public MutableLiveData<ArrayList<TransactionEntity>> getAllTransactions() {
-        final MutableLiveData<ArrayList<TransactionEntity>> mutableLiveData = new MutableLiveData<>();
+    public LiveData<List<TransactionEntity>> getAllTransactions() {
 
-        new Thread(() -> {
-            ArrayList<TransactionEntity> transactionEntities = (ArrayList<TransactionEntity>) DatabaseClient
-                    .getInstance(context)
-                    .getAppDatabase()
-                    .transactionDao()
-                    .getAllTransactions();
-            mutableLiveData.postValue(transactionEntities);
-        }).start();
+        allTransactionsLiveData = DatabaseClient
+                .getInstance(context)
+                .getAppDatabase()
+                .transactionDao()
+                .getAllTransactions();
 
-        return mutableLiveData;
+        return allTransactionsLiveData;
     }
 
-    public MutableLiveData<Float> getTotalAmountSpent(){
-        final MutableLiveData<Float> mutableLiveData = new MutableLiveData<>();
+    public LiveData<Float> getTotalAmountSpent(){
 
-        new Thread(() -> {
-            float totalAmount = DatabaseClient
-                    .getInstance(context)
-                    .getAppDatabase()
-                    .transactionDao()
-                    .getTotalAmountSpent();
+        totalLiveData = DatabaseClient
+                .getInstance(context)
+                .getAppDatabase()
+                .transactionDao()
+                .getTotalAmountSpent();
 
-            mutableLiveData.postValue(totalAmount);
-        }).start();
-
-        return mutableLiveData;
+        return totalLiveData;
     }
 
     public void addTransaction(TransactionEntity transactionEntity) {
@@ -78,5 +75,14 @@ public class TransactionRepo {
                     .transactionDao()
                     .updateTransaction(transactionEntity);
         }).start();
+    }
+
+    public void hh() {
+        allTransactionsLiveData = new LiveData<List<TransactionEntity>>() {
+            @Override
+            public void observe(@NonNull @NotNull LifecycleOwner owner, @NonNull @NotNull Observer<? super List<TransactionEntity>> observer) {
+                super.observe(owner, observer);
+            }
+        };
     }
 }

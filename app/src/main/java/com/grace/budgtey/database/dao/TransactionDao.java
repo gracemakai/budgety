@@ -1,5 +1,6 @@
 package com.grace.budgtey.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -16,10 +17,10 @@ import java.util.List;
 public interface TransactionDao {
 
     @Query("SELECT * FROM `transaction` ORDER BY date")
-    List<TransactionEntity> getAllTransactions();
+    LiveData<List<TransactionEntity>> getAllTransactions();
 
     @Query("SELECT TOTAL(amount) FROM `transaction`")
-    float getTotalAmountSpent();
+    LiveData<Float> getTotalAmountSpent();
 
     @Insert
     void insertTransaction(TransactionEntity transactionEntity);

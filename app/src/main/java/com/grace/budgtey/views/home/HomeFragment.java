@@ -34,6 +34,7 @@ import com.grace.budgtey.views.setting.SettingsFragment;
 import com.grace.budgtey.views.spendingDetails.SpendingDetailsFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment implements ListItemClickListener {
@@ -55,11 +56,15 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
 
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-        mViewModel.setBudget(getBudget());
-
         mViewModel.getAllTransactionsMutableLiveData()
-                .observe(this, allTransactionsObserver);
+                .observe(this, transactionEntities -> {
+                    transactions = (ArrayList<TransactionEntity>) transactionEntities;
 
+                    recyclerAdapter.addTransactions(transactions);
+                });
+
+        mViewModel.getTotalMutableLiveData()
+                .observe(this, this::updateExpenses);
     }
 
     @Override
@@ -102,13 +107,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mViewModel.getTotalMutableLiveData();
-        mViewModel.getAllTransactionsMutableLiveData();
-    }
-
     private void pickMonth() {
         new Utils().showDatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
 
@@ -116,94 +114,15 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
         });
     }
 
-    //Sends user transactions to recycler when they finish being read from the database
-    Observer<ArrayList<TransactionEntity>>allTransactionsObserver =
-            new Observer<ArrayList<TransactionEntity>>() {
-        @Override
-        public void onChanged(ArrayList<TransactionEntity> transactionEntities) {
-            transactions = transactionEntities;
-
-            recyclerAdapter.addTransactions(transactionEntities);
-
-            addExpenses(transactions);
-        }
-    };
-
-    //Iterate through transactions and place them in dates arrays
-    private ArrayList<DayTransactionsModel> getTransactionsInDay(
-            ArrayList<TransactionEntity> transactionEntities) {
-
-        ArrayList<DayTransactionsModel> dayTransactionsModelArrayList = new ArrayList<>();
-        ArrayList<String> dates = getDates(transactionEntities);
-
-        //Iterate through the dates
-        for (int a = 0; a < dates.size(); a++) {
-            ArrayList<TransactionEntity> entities = new ArrayList<>();
-
-            //Iterate through the transactions
-            for (int i = 0; i < transactionEntities.size(); i++) {
-
-                //If transaction date matches with the date, put it in the array
-                if (dates.get(a).equals(transactionEntities.get(i).getDate())) {
-                    entities.add(transactionEntities.get(i));
-
-                    System.out.println(dates.get(a) + " and " + transactionEntities.get(i).getDate()
-                    + " item " + transactionEntities.get(i).getNote());
-                }
-            }
-
-            DayTransactionsModel dayTransactionsModel = new DayTransactionsModel();
-            dayTransactionsModel.setDate(dates.get(a));
-            dayTransactionsModel.setDayTotal(getDayTotal(entities));
-            dayTransactionsModel.setDayTransactions(entities);
-
-            System.out.println(dayTransactionsModel.getDate() + " " + dayTransactionsModel.getDayTotal()
-            + " " + dayTransactionsModel.getDayTransactions().size());
-
-            //Add the date and its transactions to the parent array
-            dayTransactionsModelArrayList.add(dayTransactionsModel);
-        }
-
-        System.out.println(dayTransactionsModelArrayList.size());
-
-        return dayTransactionsModelArrayList;
+    private void updateExpenses(Float expenses) {
+        binding.budgetHome.setText(getBudget());
+        binding.expensesHome.setText(String.valueOf(expenses));
+        binding.balanceHome.setText(setBalance(expenses));
     }
 
-    //Get day total
-    private Integer getDayTotal(ArrayList<TransactionEntity> entities) {
-
-        float dayTotal = 0f;
-
-        for (int i = 0; i <entities.size(); i++) {
-            dayTotal += entities.get(i).getAmount();
-        }
-
-        return (int) dayTotal;
-    }
-
-    //Get all the dates that transactions
-    private ArrayList<String> getDates(ArrayList<TransactionEntity> transactionEntities) {
-
-        ArrayList<String> dates = new ArrayList<>();
-
-        for (int i = 0; i < transactionEntities.size(); i++) {
-            if (!dates.contains(transactionEntities.get(i).getDate())){
-                dates.add(transactionEntities.get(i).getDate());
-                System.out.println(transactionEntities.get(i).getDate());
-            }
-        }
-
-        return dates;
-    }
-
-    private void addExpenses(ArrayList<TransactionEntity> transactionEntities) {
-        float totalExpenses = 0f;
-
-        for (int i = 0; i < transactionEntities.size(); i++) {
-            totalExpenses += transactionEntities.get(i).getAmount();
-        }
-
-        mViewModel.setExpenses(totalExpenses);
+    //Get balance from subtracting expenses from budget
+    public String setBalance(Float expenses) {
+       return String.valueOf(Float.parseFloat(getBudget()) - expenses);
     }
 
     @Override
