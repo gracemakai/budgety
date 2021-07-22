@@ -1,6 +1,5 @@
 package com.grace.budgtey.views.home;
 
-import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,8 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -126,14 +123,15 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
         public void onChanged(ArrayList<TransactionEntity> transactionEntities) {
             transactions = transactionEntities;
 
-            recyclerAdapter.addTransactions(getTransactionsInDay(transactions));
+            recyclerAdapter.addTransactions(transactionEntities);
 
             addExpenses(transactions);
         }
     };
 
     //Iterate through transactions and place them in dates arrays
-    private ArrayList<DayTransactionsModel> getTransactionsInDay(ArrayList<TransactionEntity> transactionEntities) {
+    private ArrayList<DayTransactionsModel> getTransactionsInDay(
+            ArrayList<TransactionEntity> transactionEntities) {
 
         ArrayList<DayTransactionsModel> dayTransactionsModelArrayList = new ArrayList<>();
         ArrayList<String> dates = getDates(transactionEntities);

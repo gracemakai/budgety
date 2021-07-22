@@ -47,6 +47,8 @@ public class TransactionItemsRecyclerAdapter extends RecyclerView.Adapter<Transa
         holder.name.setText(entity.getNote());
         holder.itemAmount.setText(entity.getStringAmount());
 
+        System.out.println(entity.getNote());
+
     }
 
     @Override

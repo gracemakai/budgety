@@ -13,12 +13,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
 
     public String REQUIRED_MSG = "Required Field";
     public String yearMonthDateDayPattern = "EEEE, dd MMMM yyyy";
     public String yearMonthPattern = "MMM YYYY";
+    public String dateMonthPattern = "dd MMM";
+    public String dayOfWeekPattern = "EEE";
     // check the input field has any text or not
     // return true if it contains text otherwise false
     public boolean hasText(EditText editText) {
@@ -138,6 +141,12 @@ public class Utils {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(yearMonthPattern);
         return simpleDateFormat.format(Calendar.getInstance().getTime());
     }
+
+/*    public String getDayAndMonth(String dateTime, formart) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateMonthPattern, Locale.ENGLISH);
+        Date date = simpleDateFormat.parse(dateTime);
+        return simpleDateFormat.format();
+    }*/
 
     /**
      * Used to get current time or date according to given format

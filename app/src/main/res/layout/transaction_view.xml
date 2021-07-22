@@ -22,36 +22,68 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="0">
+
+                <TextView
+                    android:id="@+id/date_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date_hint"/>
+
+                <TextView
+                    android:id="@+id/day_of_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/day_hint"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@color/space_cadet"
+                android:layout_gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/date_home"
-                    android:layout_width="0dp"
+                    android:id="@+id/note_home"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="start"
-                    android:text="@string/today" />
+                    android:text="@string/note_hint"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
 
                 <TextView
-                    android:id="@+id/day_total_amount_home"
+                    android:id="@+id/amount_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="@string/amount" />
+                    android:text="@string/amount"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
 
             </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_transaction_items"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

@@ -153,6 +153,16 @@
 
                 </FrameLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recent_transactions"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/space_cadet"
+                    android:letterSpacing="0.12"
+                    android:textSize="16sp"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recent_transactions_recycler"
                     android:layout_width="match_parent"
